@@ -83,13 +83,14 @@ func GetAllUsers() map[string]*User {
 //	return nil, errors.New("User Not Exist")
 //}
 
-func Login(username, password string) bool {
+func Login(username, password string) (*User, error) {
+	fmt.Println("user list is ", UserList)
 	for _, u := range UserList {
 		if u.Username == username && u.Password == password {
-			return true
+			return u, nil
 		}
 	}
-	return false
+	return nil, errors.New("No Exit")
 }
 
 func DeleteUser(uid string) {

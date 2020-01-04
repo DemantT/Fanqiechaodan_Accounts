@@ -21,7 +21,7 @@ func (u *UserController) Post() {
 	json.Unmarshal(u.Ctx.Input.RequestBody, &user)
 	userInfo, err := models.AddUser(user)
 	if err != nil {
-		u.ServerFailed(err)
+		u.ServerFailed(500, err.Error())
 	} else {
 		u.ServerOk(*userInfo)
 	}
@@ -48,9 +48,9 @@ func (u *UserController) GetUser() {
 	if uid != "" {
 		user, err := models.GetUser(uid)
 		if err != nil {
-			u.Data["json"] = err.Error()
+			u.ServerFailed(403, err.Error())
 		} else {
-			u.Data["json"] = user
+			u.ServerOk(*user)
 		}
 	}
 	u.ServeJSON()
@@ -75,18 +75,17 @@ func (u *UserController) Delete() {
 // @Param	password		query 	string	true		"The password for login"
 // @Success 200 {string} login success
 // @Failure 403 user not exist
-// @router /login [get]
+// @router /login [post]
 func (u *UserController) Login() {
-	username := u.GetString("username")
-	password := u.GetString("password")
-	if models.Login(username, password) {
-		//return token  TODO
-		u.Data["json"] = "login success"
+	var user models.User
+	json.Unmarshal(u.Ctx.Input.RequestBody, &user)
+	userInfo, err := models.Login(user.Username, user.Password)
+	if err != nil {
+		u.ServerFailed(403, err.Error())
 	} else {
-		//return token  TODO
-		u.Data["json"] = "user not exist"
+		u.ServerOk(*userInfo)
+
 	}
-	u.ServeJSON()
 }
 
 // @Title logout

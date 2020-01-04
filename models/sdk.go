@@ -10,7 +10,7 @@ import (
 var mysdk *sdk.RongCloud
 
 func init() {
-	mysdk = sdk.NewRongCloud(beego.AppConfig.String("runyunapikey"), beego.AppConfig.String("runyunapisecret"), sdk.WithNumTimeout(2))
+	mysdk = sdk.NewRongCloud(beego.AppConfig.String("rongyunapikey"), beego.AppConfig.String("rongyunapisecret"), sdk.WithNumTimeout(2))
 	fmt.Println("mysdk created is ", *mysdk)
 }
 

@@ -15,7 +15,7 @@ import (
 
 func init() {
 
-	beego.Router("/", &controllers.UserController{})
-	beego.Router("/:uid", &controllers.UserController{}, "get:GetUser")
-
+	beego.Router("/v1/user", &controllers.UserController{})
+	beego.Router("/v1/user/:uid", &controllers.UserController{}, "get:GetUser")
+	beego.Router("v1/user/login", &controllers.UserController{}, "post:Login")
 }

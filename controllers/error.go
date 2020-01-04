@@ -15,7 +15,8 @@ func (c *ErrorController) ServerOk(user models.User) {
 	c.ServeJSON()
 }
 
-func (c *ErrorController) ServerFailed(err error) {
-	c.Data["json"] = err
+func (c *ErrorController) ServerFailed(code int, errMsg string) {
+	c.Ctx.ResponseWriter.WriteHeader(code)
+	c.Data["json"] = errMsg
 	c.ServeJSON()
 }
