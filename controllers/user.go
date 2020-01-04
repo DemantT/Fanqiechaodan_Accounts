@@ -18,12 +18,15 @@ type UserController struct {
 // @router / [post]
 func (u *UserController) Post() {
 	var user models.User
+	mapRet := make(map[string]string)
 	json.Unmarshal(u.Ctx.Input.RequestBody, &user)
 	userInfo, err := models.AddUser(user)
+	mapRet["id"] = userInfo.Id
+	mapRet["token"] = userInfo.Profile
 	if err != nil {
 		u.ServerFailed(500, err.Error())
 	} else {
-		u.ServerOk(*userInfo)
+		u.ServerOk(mapRet)
 	}
 }
 
@@ -45,12 +48,16 @@ func (u *UserController) GetAll() {
 // @router /:uid [get]
 func (u *UserController) GetUser() {
 	uid := u.GetString(":uid")
+	mapRet := make(map[string]string)
+
 	if uid != "" {
 		user, err := models.GetUser(uid)
+		mapRet["id"] = user.Id
+		mapRet["token"] = user.Profile
 		if err != nil {
 			u.ServerFailed(403, err.Error())
 		} else {
-			u.ServerOk(*user)
+			u.ServerOk(mapRet)
 		}
 	}
 	u.ServeJSON()
@@ -80,10 +87,14 @@ func (u *UserController) Login() {
 	var user models.User
 	json.Unmarshal(u.Ctx.Input.RequestBody, &user)
 	userInfo, err := models.Login(user.Username, user.Password)
+	mapRet := make(map[string]string)
+
+	mapRet["id"] = userInfo.Id
+	mapRet["token"] = userInfo.Profile
 	if err != nil {
 		u.ServerFailed(403, err.Error())
 	} else {
-		u.ServerOk(*userInfo)
+		u.ServerOk(mapRet)
 
 	}
 }
@@ -93,6 +104,5 @@ func (u *UserController) Login() {
 // @Success 200 {string} logout success
 // @router /logout [get]
 func (u *UserController) Logout() {
-	u.Data["json"] = "logout success"
-	u.ServeJSON()
+	u.ServerOk("logout success")
 }
