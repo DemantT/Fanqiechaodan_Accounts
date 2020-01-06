@@ -56,11 +56,12 @@ func (u *UserController) GetUser() {
 		mapRet["token"] = user.Profile
 		if err != nil {
 			u.ServerFailed(403, err.Error())
+			return
 		} else {
 			u.ServerOk(mapRet)
+			return
 		}
 	}
-	u.ServeJSON()
 }
 
 // @Title Delete
@@ -93,9 +94,10 @@ func (u *UserController) Login() {
 	mapRet["token"] = userInfo.Profile
 	if err != nil {
 		u.ServerFailed(403, err.Error())
+		return
 	} else {
 		u.ServerOk(mapRet)
-
+		return
 	}
 }
 
@@ -105,4 +107,22 @@ func (u *UserController) Login() {
 // @router /logout [get]
 func (u *UserController) Logout() {
 	u.ServerOk("logout success")
+}
+
+// @Title status
+// @Description status in user session
+// @Success 200 {status:number}
+// @router /status/:uid [get]
+func (u *UserController) Status() {
+	uid := u.GetString(":uid")
+	status, err := models.GetStatus(uid)
+	if err != nil {
+		u.ServerFailed(400, err.Error())
+		return
+	} else {
+		mapRet := make(map[string]int)
+		mapRet["status"] = status
+		u.ServerOk(mapRet)
+		return
+	}
 }

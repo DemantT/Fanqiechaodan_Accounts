@@ -12,6 +12,7 @@ var mysdk *sdk.RongCloud
 func init() {
 	mysdk = sdk.NewRongCloud(beego.AppConfig.String("rongyunapikey"), beego.AppConfig.String("rongyunapisecret"), sdk.WithNumTimeout(2))
 	fmt.Println("mysdk created is ", *mysdk)
+
 }
 
 func CreateUser(userId string) (*sdk.User, error) {
@@ -22,4 +23,8 @@ func CreateUser(userId string) (*sdk.User, error) {
 	}
 
 	return &userInfo, nil
+}
+
+func GetStatus(uerId string) (int, error) {
+	return mysdk.OnlineStatusCheck(uerId)
 }
