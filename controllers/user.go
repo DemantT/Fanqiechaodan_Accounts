@@ -166,3 +166,33 @@ func (u *UserController) GetStatus() {
 		return
 	}
 }
+
+// @Title sendmail
+// @Description send mail
+// @Success 200
+// @router /mail/send [post]
+func (u *UserController) SendMail() {
+	var mail models.Mail
+	json.Unmarshal(u.Ctx.Input.RequestBody, &mail)
+	err := models.SendMail(mail.To, mail.Msg)
+	if err != nil {
+		fmt.Println("send mail err is ", err)
+		u.ServerFailed(400, err.Error())
+		return
+	}
+	resp := new(models.Resp)
+	resp.Meta = models.Meta{
+		Code:    20000,
+		Type:    "",
+		Message: "",
+	}
+	resp.Data = ""
+
+	if err != nil {
+		u.ServerFailed(400, err.Error())
+		return
+	} else {
+		u.ServerOk(resp)
+		return
+	}
+}

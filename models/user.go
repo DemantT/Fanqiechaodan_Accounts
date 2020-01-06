@@ -3,6 +3,8 @@ package models
 import (
 	"errors"
 	"fmt"
+
+	"gopkg.in/gomail.v2"
 )
 
 var (
@@ -25,6 +27,11 @@ type User struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 	Profile  string `json:"token"`
+}
+
+type Mail struct {
+	To  string `json:"to"`
+	Msg string `json:"msg"`
 }
 
 //type Profile struct {
@@ -86,4 +93,21 @@ func Login(username, password string) (*User, error, bool) {
 
 func DeleteUser(uid string) {
 	delete(UserList, uid)
+}
+
+func SendMail(to, msg string) error {
+	m := gomail.NewMessage()
+	m.SetAddressHeader("From", "18291169093@163.com", "这是我") // 发件人
+	m.SetHeader("To",                                        // 收件人
+		m.FormatAddress(to, "测试"),
+		//m.FormatAddress("********@qq.com", "郭靖"),
+	)
+	m.SetHeader("Subject", "Gomail") // 主题
+	m.SetBody("text/html", msg)      // 正文
+
+	d := gomail.NewPlainDialer("smtp.163.com", 465, "18291169093@163.com", "lc931027") // 发送邮件服务器、端口、发件人账号、发件人密码
+	if err := d.DialAndSend(m); err != nil {
+		return err
+	}
+	return nil
 }

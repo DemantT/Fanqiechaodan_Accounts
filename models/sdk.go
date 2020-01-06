@@ -25,6 +25,7 @@ func CreateUser(userId string) (*sdk.User, error) {
 	return &userInfo, nil
 }
 
+//0 离线 1 在线
 func GetStatus(uerId string) (int, error) {
 	return mysdk.OnlineStatusCheck(uerId)
 }

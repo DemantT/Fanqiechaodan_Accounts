@@ -21,6 +21,7 @@ func init() {
 			beego.NSRouter("/login", &controllers.UserController{}, "post:Login"),
 			beego.NSRouter("/logout", &controllers.UserController{}, "get:Logout"),
 			beego.NSRouter("/status/:uid", &controllers.UserController{}, "get:GetStatus"),
+			beego.NSRouter("/mail/send", &controllers.UserController{}, "post:SendMail"),
 		),
 		beego.NSNamespace("/messages"), //beego.NSRouter("/history/:id", &controllers.UserController{}, "get:History"),
 		//beego.NSRouter("/send", &controllers.UserController{}, "post:Send"),
