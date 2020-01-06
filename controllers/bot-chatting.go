@@ -3,7 +3,6 @@ package controllers
 import (
 	"encoding/json"
 	"fanqiechaodan-Accounts/models"
-	"fmt"
 )
 
 // Operations about Users
@@ -18,5 +17,22 @@ func (u *BotChattingController) Send() {
 	if err != nil {
 
 	}
-	fmt.Println(reply)
+	resp := new(models.Resp)
+	resp.Meta = models.Meta{
+		Code:    20000,
+		Type:    "",
+		Message: "",
+	}
+
+	mapRet := make(map[string]interface{})
+
+	mapRet["reply"] = reply
+	resp.Data = mapRet
+	if err != nil {
+		u.ServerFailed(403, err.Error())
+		return
+	} else {
+		u.ServerOk(resp)
+		return
+	}
 }
