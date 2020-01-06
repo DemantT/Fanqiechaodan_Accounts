@@ -50,3 +50,27 @@ func ReadUser(filepath string) (error, []User) {
 	fmt.Println("v is ", v)
 	return nil, v
 }
+
+func WriteJson(filepath string, message interface{}) error {
+	b, err := json.Marshal(message)
+	fmt.Println("b is ", string(b))
+	if err != nil {
+		fmt.Println("Marshal error:", err)
+		return err
+	}
+	//生成json文件
+	fl, err := os.OpenFile(filepath, os.O_RDWR|os.O_CREATE, 0644)
+	if err != nil {
+		fmt.Println("open file err is ", err)
+		return err
+	}
+	defer fl.Close()
+	writer := bufio.NewWriter(fl)
+	_, err = writer.Write(b)
+	fmt.Println("err is ", err)
+	// 因为 writer 是带缓存，因此调用 WriterString 方法时，其实
+	// 内容是先写入到缓存中，所以需要调用 Flush 方法，将缓冲的数据
+	// 真正写入到文件中，否则文件中会没有数据 ！！！
+	writer.Flush()
+	return nil
+}
