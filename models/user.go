@@ -97,9 +97,9 @@ func DeleteUser(uid string) {
 
 func SendMail(to, msg string) error {
 	m := gomail.NewMessage()
-	m.SetAddressHeader("From", "18291169093@163.com", "这是我") // 发件人
-	m.SetHeader("To",                                        // 收件人
-		m.FormatAddress(to, "测试"),
+	m.SetAddressHeader("From", "18291169093@163.com", "me") // 发件人
+	m.SetHeader("To",                                       // 收件人
+		m.FormatAddress(to, "test"),
 		//m.FormatAddress("********@qq.com", "郭靖"),
 	)
 	m.SetHeader("Subject", "Gomail") // 主题
