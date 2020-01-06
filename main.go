@@ -12,6 +12,5 @@ func main() {
 		beego.BConfig.WebConfig.StaticDir["/swagger"] = "swagger"
 	}
 
-	//beego.ErrorController(&controllers.ErrorController{})
 	beego.Run()
 }
