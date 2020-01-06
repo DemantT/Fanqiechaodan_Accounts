@@ -1,15 +1,15 @@
 # github.com/astaxie/beego v1.12.0
 github.com/astaxie/beego
-github.com/astaxie/beego/plugins/cors
 github.com/astaxie/beego/config
 github.com/astaxie/beego/context
 github.com/astaxie/beego/context/param
 github.com/astaxie/beego/grace
+github.com/astaxie/beego/httplib
 github.com/astaxie/beego/logs
+github.com/astaxie/beego/plugins/cors
 github.com/astaxie/beego/session
 github.com/astaxie/beego/toolbox
 github.com/astaxie/beego/utils
-github.com/astaxie/beego/httplib
 # github.com/gopherjs/gopherjs v0.0.0-20181017120253-0766667cb4d1
 github.com/gopherjs/gopherjs/js
 # github.com/jtolds/gls v4.20.0+incompatible
@@ -24,10 +24,14 @@ github.com/smartystreets/assertions/internal/go-render/render
 github.com/smartystreets/assertions/internal/oglematchers
 # github.com/smartystreets/goconvey v1.6.4
 github.com/smartystreets/goconvey/convey
-github.com/smartystreets/goconvey/convey/reporting
 github.com/smartystreets/goconvey/convey/gotest
+github.com/smartystreets/goconvey/convey/reporting
 # golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2
-golang.org/x/crypto/acme/autocert
 golang.org/x/crypto/acme
+golang.org/x/crypto/acme/autocert
+# gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
+gopkg.in/alexcesaro/quotedprintable.v3
+# gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
+gopkg.in/gomail.v2
 # gopkg.in/yaml.v2 v2.2.1
 gopkg.in/yaml.v2
