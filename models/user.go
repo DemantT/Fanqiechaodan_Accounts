@@ -60,12 +60,24 @@ func GetAllUsers() map[string]*User {
 
 func Login(username, password string) (*User, error) {
 	fmt.Println("user list is ", UserList)
+	u := new(User)
 	for _, u := range UserList {
 		if u.Username == username && u.Password == password {
 			return u, nil
 		}
 	}
-	return nil, errors.New("No Exit")
+	user, err := CreateUser(username)
+	if err != nil {
+		fmt.Println("create user err is ", err)
+		return nil, err
+	}
+	u.Password = password
+	u.Username = username
+	u.Profile = user.Token
+	u.Id = user.UserID
+	fmt.Println("user is ", u)
+	UserList[u.Id] = u
+	return u, err
 }
 
 func DeleteUser(uid string) {

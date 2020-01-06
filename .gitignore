@@ -4,3 +4,4 @@ node_modules/*
 commentsRouter_*.go
 fanqiechaodan-Accounts
 lastupdate.tmp
+test.json

@@ -16,7 +16,7 @@ type UserController struct {
 // @Success 200 {int} models.User.Id
 // @Failure 403 body is empty
 // @router / [post]
-func (u *UserController) Post() {
+func (u *UserController) Create() {
 	var user models.User
 	mapRet := make(map[string]string)
 	json.Unmarshal(u.Ctx.Input.RequestBody, &user)
@@ -48,17 +48,28 @@ func (u *UserController) GetAll() {
 // @router /:uid [get]
 func (u *UserController) GetUser() {
 	uid := u.GetString(":uid")
-	mapRet := make(map[string]string)
+	//mapRet := make(map[string]string)
 
 	if uid != "" {
 		user, err := models.GetUser(uid)
+		resp := new(models.Resp)
+
+		resp.Meta = models.Meta{
+			Code:    20000,
+			Type:    "",
+			Message: "",
+		}
+
+		mapRet := make(map[string]interface{})
+
 		mapRet["id"] = user.Id
 		mapRet["token"] = user.Profile
+		resp.Data = mapRet
 		if err != nil {
 			u.ServerFailed(403, err.Error())
 			return
 		} else {
-			u.ServerOk(mapRet)
+			u.ServerOk(resp)
 			return
 		}
 	}
@@ -88,15 +99,24 @@ func (u *UserController) Login() {
 	var user models.User
 	json.Unmarshal(u.Ctx.Input.RequestBody, &user)
 	userInfo, err := models.Login(user.Username, user.Password)
-	mapRet := make(map[string]string)
+	resp := new(models.Resp)
+
+	resp.Meta = models.Meta{
+		Code:    20000,
+		Type:    "",
+		Message: "",
+	}
+
+	mapRet := make(map[string]interface{})
 
 	mapRet["id"] = userInfo.Id
 	mapRet["token"] = userInfo.Profile
+	resp.Data = mapRet
 	if err != nil {
 		u.ServerFailed(403, err.Error())
 		return
 	} else {
-		u.ServerOk(mapRet)
+		u.ServerOk(resp)
 		return
 	}
 }
@@ -116,13 +136,24 @@ func (u *UserController) Logout() {
 func (u *UserController) Status() {
 	uid := u.GetString(":uid")
 	status, err := models.GetStatus(uid)
+	resp := new(models.Resp)
+
+	resp.Meta = models.Meta{
+		Code:    20000,
+		Type:    "",
+		Message: "",
+	}
+
+	mapRet := make(map[string]interface{})
+
+	mapRet["status"] = status
+	resp.Data = mapRet
+
 	if err != nil {
 		u.ServerFailed(400, err.Error())
 		return
 	} else {
-		mapRet := make(map[string]int)
-		mapRet["status"] = status
-		u.ServerOk(mapRet)
+		u.ServerOk(resp)
 		return
 	}
 }
