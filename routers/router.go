@@ -22,6 +22,10 @@ func init() {
 			beego.NSRouter("/logout", &controllers.UserController{}, "get:Logout"),
 			beego.NSRouter("/status", &controllers.UserController{}, "get:Status"),
 		),
+
+		beego.NSNamespace("/bot-chatting",
+			beego.NSRouter("/send", &controllers.BotChattingController{}, "post:Send"),
+		),
 	)
 	beego.AddNamespace(ns)
 
