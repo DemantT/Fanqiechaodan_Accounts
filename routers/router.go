@@ -16,17 +16,19 @@ import (
 func init() {
 	ns := beego.NewNamespace("/v1",
 		beego.NSNamespace("/user",
-			beego.NSRouter("/create", &controllers.UserController{}),
+			beego.NSRouter("/create", &controllers.UserController{}, "post:Create"),
 			beego.NSRouter("/:uid", &controllers.UserController{}, "get:GetUser"),
 			beego.NSRouter("/login", &controllers.UserController{}, "post:Login"),
 			beego.NSRouter("/logout", &controllers.UserController{}, "get:Logout"),
 			beego.NSRouter("/status", &controllers.UserController{}, "get:Status"),
 		),
-
 		beego.NSNamespace("/bot-chatting",
 			beego.NSRouter("/send", &controllers.BotChattingController{}, "post:Send"),
-		),
-	)
-	beego.AddNamespace(ns)
 
+			beego.NSNamespace("/messages",
+				beego.NSRouter("/history/:id", &controllers.UserController{}, "get:History"),
+				beego.NSRouter("/send", &controllers.UserController{}, "post:Send"),
+			),
+		))
+	beego.AddNamespace(ns)
 }
