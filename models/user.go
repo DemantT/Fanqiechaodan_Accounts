@@ -9,12 +9,15 @@ var (
 	UserList map[string]*User
 )
 
-// 所有的返回值都用User结构体 TODO
-
 func init() {
+	err, userArr := ReadUser("/Users/liuchuan/myowncode/testcode/test.json")
+	if err != nil {
+		fmt.Println("read user err is ", err)
+	}
 	UserList = make(map[string]*User)
-	u := User{"user_11111", "astaxie", "11111", "mytoken"}
-	UserList["user_11111"] = &u
+	for _, user := range userArr {
+		UserList[user.Id] = &user
+	}
 }
 
 type User struct {
@@ -58,18 +61,19 @@ func GetAllUsers() map[string]*User {
 	return UserList
 }
 
-func Login(username, password string) (*User, error) {
+func Login(username, password string) (*User, error, bool) {
 	fmt.Println("user list is ", UserList)
 	u := new(User)
 	for _, u := range UserList {
 		if u.Username == username && u.Password == password {
-			return u, nil
+			fmt.Println("get user")
+			return u, nil, true
 		}
 	}
 	user, err := CreateUser(username)
 	if err != nil {
 		fmt.Println("create user err is ", err)
-		return nil, err
+		return nil, err, false
 	}
 	u.Password = password
 	u.Username = username
@@ -77,7 +81,7 @@ func Login(username, password string) (*User, error) {
 	u.Id = user.UserID
 	fmt.Println("user is ", u)
 	UserList[u.Id] = u
-	return u, err
+	return u, err, false
 }
 
 func DeleteUser(uid string) {

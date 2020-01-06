@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"fanqiechaodan-Accounts/models"
+	"fmt"
 )
 
 // Operations about Users
@@ -98,7 +99,7 @@ func (u *UserController) Delete() {
 func (u *UserController) Login() {
 	var user models.User
 	json.Unmarshal(u.Ctx.Input.RequestBody, &user)
-	userInfo, err := models.Login(user.Username, user.Password)
+	userInfo, err, bIsnew := models.Login(user.Username, user.Password)
 	resp := new(models.Resp)
 
 	resp.Meta = models.Meta{
@@ -116,6 +117,9 @@ func (u *UserController) Login() {
 		u.ServerFailed(403, err.Error())
 		return
 	} else {
+		if !bIsnew {
+			models.WriteUser("/Users/liuchuan/myowncode/testcode/test.json", *userInfo)
+		}
 		u.ServerOk(resp)
 		return
 	}
@@ -133,9 +137,14 @@ func (u *UserController) Logout() {
 // @Description status in user session
 // @Success 200 {status:number}
 // @router /status/:uid [get]
-func (u *UserController) Status() {
+func (u *UserController) GetStatus() {
 	uid := u.GetString(":uid")
 	status, err := models.GetStatus(uid)
+	if err != nil {
+		fmt.Println("status err is ", err)
+		u.ServerFailed(400, err.Error())
+		return
+	}
 	resp := new(models.Resp)
 
 	resp.Meta = models.Meta{
