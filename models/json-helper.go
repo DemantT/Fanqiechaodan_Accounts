@@ -50,3 +50,51 @@ func ReadUser(filepath string) (error, []User) {
 	fmt.Println("v is ", v)
 	return nil, v
 }
+
+func ReadChattingMessages(filepath string) (error, []ChattingMessage) {
+	data, err := ioutil.ReadFile(filepath)
+	if err != nil {
+		return err, nil
+	}
+	var messages []ChattingMessage
+
+	//读取的数据为json格式，需要进行解码
+	err = json.Unmarshal(data, &messages)
+	if err != nil {
+		fmt.Println("unmarsh err is ", err)
+		return err, nil
+	}
+	return nil, messages
+}
+
+func WriteChattingMessage(filepath string, message ChattingMessage) (error, []ChattingMessage) {
+	data, err := ioutil.ReadFile(filepath)
+	if err != nil {
+		return err, nil
+	}
+	var messages []ChattingMessage
+
+	err = json.Unmarshal(data, &messages)
+	if err != nil {
+		fmt.Println("unmarsh err is ", err)
+		return err, nil
+	}
+	messages = append(messages, message)
+
+	fl, err := os.OpenFile(filepath, os.O_RDWR|os.O_CREATE, 0644)
+	if err != nil {
+		fmt.Println("open file err is ", err)
+		return err, nil
+	}
+
+	defer fl.Close()
+
+	b, err := json.Marshal(messages)
+	writer := bufio.NewWriter(fl)
+	_, err = writer.Write(b)
+
+	fmt.Println("err is ", err)
+	writer.Flush()
+	return nil, messages
+}
+
