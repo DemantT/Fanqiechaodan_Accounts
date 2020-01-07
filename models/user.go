@@ -30,8 +30,9 @@ type User struct {
 }
 
 type Mail struct {
-	To  string `json:"to"`
-	Msg string `json:"msg"`
+	To    string `json:"to"`
+	Title string `json:"title"`
+	Msg   string `json:"message"`
 }
 
 //type Profile struct {
@@ -95,18 +96,23 @@ func DeleteUser(uid string) {
 	delete(UserList, uid)
 }
 
-func SendMail(to, msg string) error {
+func SendMail(userId string, mail Mail) error {
 	m := gomail.NewMessage()
 	m.SetAddressHeader("From", "18291169093@163.com", "me") // 发件人
 	m.SetHeader("To",                                       // 收件人
-		m.FormatAddress(to, "test"),
-		//m.FormatAddress("********@qq.com", "郭靖"),
+		m.FormatAddress(mail.To, "test"),
 	)
-	m.SetHeader("Subject", "Gomail") // 主题
-	m.SetBody("text/html", msg)      // 正文
+	m.SetHeader("Subject", mail.Title) // 主题
+	m.SetBody("text/html", mail.Msg)   // 正文
 
 	d := gomail.NewPlainDialer("smtp.163.com", 465, "18291169093@163.com", "lc931027") // 发送邮件服务器、端口、发件人账号、发件人密码
 	if err := d.DialAndSend(m); err != nil {
+		return err
+	}
+	filePath := "/Users/liuchuan/myowncode/testcode/" + userId + "+mail.json"
+	err := WriteJson(filePath, mail)
+	if err != nil {
+		fmt.Println("write json err is ", err)
 		return err
 	}
 	return nil

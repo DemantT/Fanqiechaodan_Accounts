@@ -173,8 +173,9 @@ func (u *UserController) GetStatus() {
 // @router /mail/send [post]
 func (u *UserController) SendMail() {
 	var mail models.Mail
+	uid := u.GetString(":uid")
 	json.Unmarshal(u.Ctx.Input.RequestBody, &mail)
-	err := models.SendMail(mail.To, mail.Msg)
+	err := models.SendMail(uid, mail)
 	if err != nil {
 		fmt.Println("send mail err is ", err)
 		u.ServerFailed(400, err.Error())
